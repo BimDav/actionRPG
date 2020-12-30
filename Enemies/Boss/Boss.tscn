@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://Enemies/Boss/Boss.gd" type="Script" id=1]
 [ext_resource path="res://WhiteColor.shader" type="Shader" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://Hurtboxes and hitboxes/Hitbox.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Enemies/Bat/Bat.png" type="Texture" id=9]
 [ext_resource path="res://Shadows/MediumShadow.png" type="Texture" id=10]
+[ext_resource path="res://Enemies/KinematicEnemy.gd" type="Script" id=11]
 
 [sub_resource type="ParticlesMaterial" id=1]
 lifetime_randomness = 0.2
@@ -59,9 +60,6 @@ animations = [ {
 "name": "Fly",
 "speed": 8.0
 } ]
-
-[sub_resource type="CircleShape2D" id=9]
-radius = 6.87126
 
 [sub_resource type="CapsuleShape2D" id=10]
 radius = 11.6409
@@ -156,10 +154,11 @@ tracks/3/keys = {
 "values": [ Vector2( 0, 0 ), Vector2( 0, 0 ), Vector2( 0, 8 ) ]
 }
 
-[node name="Boss" type="KinematicBody2D"]
-collision_layer = 16
+[sub_resource type="CircleShape2D" id=9]
+radius = 6.87126
+
+[node name="Boss" type="Node2D"]
 script = ExtResource( 1 )
-acceleration = 0.2
 
 [node name="Particles2D" type="Particles2D" parent="."]
 pause_mode = 2
@@ -172,15 +171,12 @@ process_material = SubResource( 1 )
 material = SubResource( 2 )
 frames = SubResource( 8 )
 animation = "Fly"
+frame = 2
 playing = true
 offset = Vector2( 0, -12 )
 
 [node name="ShadowSprite" type="Sprite" parent="."]
 texture = ExtResource( 10 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
-shape = SubResource( 9 )
 
 [node name="Hurtbox" parent="." instance=ExtResource( 3 )]
 visible = false
@@ -223,16 +219,20 @@ anims/Start = SubResource( 13 )
 anims/Stop = SubResource( 14 )
 
 [node name="BossStates" parent="." instance=ExtResource( 6 )]
-main_node_path = NodePath("..")
+kbody_node_path = NodePath("../KinematicBody2D")
+animated_sprite_node_path = NodePath("../AnimatedSprite")
 
 [node name="CutScenePlayer" type="AnimationPlayer" parent="."]
 pause_mode = 2
 anims/CutScene = SubResource( 15 )
-[connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
-[connection signal="invincibility_stopped" from="Hurtbox" to="." method="_on_Hurtbox_invincibility_stopped"]
+
+[node name="KinematicBody2D" type="KinematicBody2D" parent="."]
+script = ExtResource( 11 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KinematicBody2D"]
+visible = false
+shape = SubResource( 9 )
 [connection signal="no_health" from="Stats" to="." method="_on_Stats_no_health"]
-[connection signal="generated_object" from="RandomObjectGenerator" to="." method="_on_RandomObjectGenerators_generated_object"]
-[connection signal="generated_object" from="RandomObjectGenerator2" to="." method="_on_RandomObjectGenerators_generated_object"]
 [connection signal="hit_wall" from="BossStates" to="." method="_on_BossStates_hit_wall"]
 [connection signal="animation_finished" from="CutScenePlayer" to="." method="_on_CutScenePlayer_animation_finished"]
 

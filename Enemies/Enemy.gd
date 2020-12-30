@@ -1,18 +1,11 @@
-extends KinematicBody2D
+extends Node2D
 
 class_name Enemy
-
-export(float) var acceleration = 0.1
-export(float) var max_speed = 0.8
-export(float) var friction = 1
 
 signal object_generated(object_node)
 signal enemy_death_effect_launch(node)
 
 const EnemyDeathEffect = preload("res://Effects/EnemyDeathEffect.tscn")
-
-var knockback = Vector2.ZERO
-var velocity = Vector2.ZERO
 
 onready var stats = $Stats
 onready var animated_sprite = $AnimatedSprite
@@ -21,7 +14,6 @@ onready var blink_animation_player = $BlinkAnimationPlayer
 
 
 func _on_Hurtbox_area_entered(area):
-	knockback = area.knockback_vector * 4.2 * 60
 	stats.health -= area.damage
 	blink_animation_player.play("Start")
 	

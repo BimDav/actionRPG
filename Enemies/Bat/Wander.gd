@@ -1,15 +1,17 @@
-extends State
+extends BaseBatState
 
+onready var wander_controller = $WanderController
 
 func process_state(delta):
-	var target_position = main.wander_controller.target_position
-	if main.global_position.distance_to(target_position) > main.max_speed * delta * 60:
-		main.velocity = main.velocity.move_toward(main.global_position.direction_to(target_position) * main.max_speed,
-		main.global_position.distance_to(target_position) * delta)
+	var target_position = wander_controller.target_position
+	if kbody.global_position.distance_to(target_position) > kbody.max_speed * delta * 60:
+		velocity = velocity.move_toward(kbody.global_position.direction_to(target_position) * kbody.max_speed,
+		kbody.global_position.distance_to(target_position) * delta)
 	else:
-		next_state("Idle", null)
+		next_state("Idle", velocity)
+	.process_state(delta)
 		
 func handle_event(event):
 	if event == "player_detected":
-		next_state("Chase", null)
+		next_state("Chase", velocity)
 

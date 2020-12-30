@@ -1,14 +1,19 @@
 extends State
 
-export var acceleration = 2.2
-export var max_speed = 2
-export var friction = 2
+var roll_vector = Vector2.DOWN
+var kbody
+var animation_tree
+var animation_state
+var velocity = Vector2.ZERO
+
+func enter(_args):
+	velocity = Vector2.ZERO
 
 func handle_input(event):
 	if event.is_action_pressed("attack"):
-		next_state("Attack", null)
+		next_state("Attack", roll_vector)
 	elif event.is_action_pressed("roll"):
-		next_state("Roll", null)
+		next_state("Roll", roll_vector)
 	return null
 	
 func process_state(delta):
@@ -18,20 +23,16 @@ func process_state(delta):
 	input_vector = input_vector.normalized()
 	
 	if input_vector != Vector2.ZERO:
-		main.roll_vector = input_vector
-		main.sword_hitbox.knockback_vector = input_vector
-		main.animation_tree.set("parameters/Idle/blend_position", input_vector)
-		main.animation_tree.set("parameters/Run/blend_position", input_vector)
-		main.animation_tree.set("parameters/Attack/blend_position", input_vector)
-		main.animation_tree.set("parameters/Roll/blend_position", input_vector)
-		main.animation_state.travel("Run")
+		roll_vector = input_vector
+		animation_tree.set("parameters/Idle/blend_position", input_vector)
+		animation_tree.set("parameters/Run/blend_position", input_vector)
+		animation_state.travel("Run")
 	else:
-		main.animation_state.travel("Idle")
+		animation_state.travel("Idle")
 	
-	var velocity = main.velocity
-	velocity += input_vector * acceleration * delta * 60
-	velocity = velocity.move_toward(Vector2.ZERO, friction * delta * 60)
+	velocity += input_vector * kbody.acceleration * delta * 60
+	velocity = velocity.move_toward(Vector2.ZERO, kbody.friction * delta * 60)
 	velocity = velocity * 60
-	velocity = velocity.clamped(max_speed)
+	velocity = velocity.clamped(kbody.max_speed)
 	
-	main.velocity = main.move_and_slide(velocity * 60) / 60
+	velocity = kbody.move_and_slide(velocity * 60) / 60

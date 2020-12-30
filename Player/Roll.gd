@@ -1,10 +1,17 @@
 extends State
 
 export var roll_speed = 2.3
+var roll_vector = Vector2.DOWN
+var animation_tree
+var animation_state
+var hurtbox
+var kbody
 
-func enter(_args):
-	main.animation_state.travel("Roll")
-	main.hurtbox.invincible = true
+func enter(roll_vector_):
+	animation_state.travel("Roll")
+	hurtbox.invincible = true
+	roll_vector = roll_vector_
+	animation_tree.set("parameters/Roll/blend_position", roll_vector_)
 	
 func handle_input(event):
 	if event.is_action_pressed("attack") or event.is_action_pressed("roll"):
@@ -12,13 +19,12 @@ func handle_input(event):
 	return null
 	
 func process_state(_delta):
-	var velocity = main.roll_vector * roll_speed
-	main.velocity = main.move_and_slide(velocity * 60) / 60
+	var velocity = roll_vector * roll_speed
+	velocity = kbody.move_and_slide(velocity * 60) / 60
 		
 func handle_event(event):
 	if event == "roll_end":
 		next_state("Move", null)
 	
 func exit():
-	main.velocity = Vector2.ZERO
-	main.hurtbox.invincible = false
+	hurtbox.invincible = false

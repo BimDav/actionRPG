@@ -3,15 +3,15 @@
 [ext_resource path="res://Enemies/Bat/Bat.png" type="Texture" id=1]
 [ext_resource path="res://Shadows/SmallShadow.png" type="Texture" id=2]
 [ext_resource path="res://Hurtboxes and hitboxes/Hurtbox.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Enemies/Bat/Bat.gd" type="Script" id=4]
+[ext_resource path="res://Enemies/Enemy.gd" type="Script" id=4]
 [ext_resource path="res://Stats.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Player/PlayerDetectionZone.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Hurtboxes and hitboxes/Hitbox.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Hurtboxes and hitboxes/SoftCollision.tscn" type="PackedScene" id=8]
-[ext_resource path="res://Enemies/Bat/WanderController.tscn" type="PackedScene" id=9]
 [ext_resource path="res://World/RandomObjectGenerator.tscn" type="PackedScene" id=10]
 [ext_resource path="res://WhiteColor.shader" type="Shader" id=11]
 [ext_resource path="res://Enemies/Bat/BatStates.tscn" type="PackedScene" id=12]
+[ext_resource path="res://Enemies/KinematicEnemy.gd" type="Script" id=13]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
@@ -45,9 +45,6 @@ animations = [ {
 "name": "Fly",
 "speed": 8.0
 } ]
-
-[sub_resource type="CircleShape2D" id=8]
-radius = 4.10088
 
 [sub_resource type="CapsuleShape2D" id=9]
 radius = 7.0
@@ -95,8 +92,10 @@ tracks/0/keys = {
 "values": [ false ]
 }
 
-[node name="Bat" type="KinematicBody2D"]
-collision_layer = 16
+[sub_resource type="CircleShape2D" id=8]
+radius = 4.10088
+
+[node name="Bat" type="Node2D"]
 script = ExtResource( 4 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
@@ -109,9 +108,6 @@ offset = Vector2( 0, -12 )
 
 [node name="ShadowSprite" type="Sprite" parent="."]
 texture = ExtResource( 2 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource( 8 )
 
 [node name="Hurtbox" parent="." instance=ExtResource( 3 )]
 position = Vector2( 0, -15 )
@@ -144,8 +140,6 @@ shape = SubResource( 11 )
 [node name="CollisionShape2D" parent="SoftCollision" index="0"]
 shape = SubResource( 12 )
 
-[node name="WanderController" parent="." instance=ExtResource( 9 )]
-
 [node name="RandomObjectGenerator" parent="." instance=ExtResource( 10 )]
 position = Vector2( 0, -14 )
 heart_ratio = 0.4
@@ -155,13 +149,24 @@ anims/Start = SubResource( 13 )
 anims/Stop = SubResource( 14 )
 
 [node name="BatStates" parent="." instance=ExtResource( 12 )]
-main_node_path = NodePath("..")
+kbody_node_path = NodePath("../KinematicBody2D")
+animated_sprite_node_path = NodePath("../AnimatedSprite")
+detection_zone_node_path = NodePath("../PlayerDetectionZone")
+
+[node name="KinematicBody2D" type="KinematicBody2D" parent="."]
+script = ExtResource( 13 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KinematicBody2D"]
+shape = SubResource( 8 )
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="KinematicBody2D"]
+remote_path = NodePath("../..")
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
+[connection signal="area_entered" from="Hurtbox" to="KinematicBody2D" method="_on_Hurtbox_area_entered"]
 [connection signal="invincibility_stopped" from="Hurtbox" to="." method="_on_Hurtbox_invincibility_stopped"]
 [connection signal="no_health" from="Stats" to="." method="_on_Stats_no_health"]
 [connection signal="player_detected" from="PlayerDetectionZone" to="BatStates" method="_on_PlayerDetectionZone_player_detected"]
 [connection signal="player_lost" from="PlayerDetectionZone" to="BatStates" method="_on_PlayerDetectionZone_player_lost"]
-[connection signal="new_target_position" from="WanderController" to="BatStates" method="_on_WanderController_new_target_position"]
 [connection signal="generated_object" from="RandomObjectGenerator" to="." method="_on_RandomObjectGenerators_generated_object"]
 
 [editable path="Hurtbox"]
