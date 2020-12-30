@@ -1,4 +1,4 @@
-extends YSort
+extends Node2D
 
 signal player_hurt_sound_launch(node)
 
@@ -9,7 +9,7 @@ var stats = PlayerStats
 onready var animation_player = $AnimationPlayer
 onready var animation_tree = $AnimationTree
 onready var animation_state = animation_tree.get("parameters/playback")
-onready var hurtbox = $KinematicBody2D/Hurtbox
+onready var hurtbox = $Hurtbox
 onready var blink_animation_player = $BlinkAnimationPlayer
 onready var player_states = $PlayerStates
 
