@@ -20,3 +20,4 @@ script = ExtResource( 4 )
 
 [node name="Chase" type="Node" parent="."]
 script = ExtResource( 3 )
+[connection signal="new_target_position" from="Wander/WanderController" to="." method="_on_WanderController_new_target_position"]

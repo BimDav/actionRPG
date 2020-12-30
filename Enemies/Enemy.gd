@@ -1,4 +1,4 @@
-extends Node2D
+extends YSort
 
 class_name Enemy
 
@@ -8,8 +8,8 @@ signal enemy_death_effect_launch(node)
 const EnemyDeathEffect = preload("res://Effects/EnemyDeathEffect.tscn")
 
 onready var stats = $Stats
-onready var animated_sprite = $AnimatedSprite
-onready var soft_collision = $SoftCollision
+onready var animated_sprite = $KinematicBody2D/AnimatedSprite
+onready var soft_collision = $KinematicBody2D/SoftCollision
 onready var blink_animation_player = $BlinkAnimationPlayer
 
 
