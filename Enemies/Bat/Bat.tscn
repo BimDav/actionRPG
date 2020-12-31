@@ -46,20 +46,20 @@ animations = [ {
 "speed": 8.0
 } ]
 
-[sub_resource type="CapsuleShape2D" id=9]
+[sub_resource type="CapsuleShape2D" id=8]
 radius = 7.0
 height = 6.0
 
-[sub_resource type="CircleShape2D" id=10]
+[sub_resource type="CircleShape2D" id=9]
 radius = 59.4783
 
-[sub_resource type="CircleShape2D" id=11]
+[sub_resource type="CircleShape2D" id=10]
 radius = 5.13893
 
-[sub_resource type="CircleShape2D" id=12]
+[sub_resource type="CircleShape2D" id=11]
 radius = 5.03393
 
-[sub_resource type="Animation" id=13]
+[sub_resource type="Animation" id=12]
 resource_name = "Start"
 length = 0.2
 loop = true
@@ -76,7 +76,7 @@ tracks/0/keys = {
 "values": [ true, false ]
 }
 
-[sub_resource type="Animation" id=14]
+[sub_resource type="Animation" id=13]
 resource_name = "Stop"
 length = 0.1
 tracks/0/type = "value"
@@ -92,7 +92,7 @@ tracks/0/keys = {
 "values": [ false ]
 }
 
-[sub_resource type="CircleShape2D" id=8]
+[sub_resource type="CircleShape2D" id=14]
 radius = 4.10088
 
 [node name="Bat" type="Node2D"]
@@ -114,7 +114,7 @@ position = Vector2( 0, -15 )
 collision_layer = 8
 
 [node name="CollisionShape2D" parent="Hurtbox" index="0"]
-shape = SubResource( 9 )
+shape = SubResource( 8 )
 
 [node name="Timer" parent="Hurtbox" index="1"]
 wait_time = 0.5
@@ -126,27 +126,27 @@ max_health = 2
 
 [node name="CollisionShape2D" parent="PlayerDetectionZone" index="0"]
 modulate = Color( 0.592157, 0.447059, 0.454902, 0.235294 )
-shape = SubResource( 10 )
+shape = SubResource( 9 )
 
 [node name="Hitbox" parent="." instance=ExtResource( 7 )]
 collision_mask = 4
 
 [node name="CollisionShape2D" parent="Hitbox" index="0"]
 position = Vector2( 0.10511, -15.7668 )
-shape = SubResource( 11 )
+shape = SubResource( 10 )
 
 [node name="SoftCollision" parent="." instance=ExtResource( 8 )]
 
 [node name="CollisionShape2D" parent="SoftCollision" index="0"]
-shape = SubResource( 12 )
+shape = SubResource( 11 )
 
 [node name="RandomObjectGenerator" parent="." instance=ExtResource( 10 )]
 position = Vector2( 0, -14 )
 heart_ratio = 0.4
 
 [node name="BlinkAnimationPlayer" type="AnimationPlayer" parent="."]
-anims/Start = SubResource( 13 )
-anims/Stop = SubResource( 14 )
+anims/Start = SubResource( 12 )
+anims/Stop = SubResource( 13 )
 
 [node name="BatStates" parent="." instance=ExtResource( 12 )]
 kbody_node_path = NodePath("../KinematicBody2D")
@@ -155,14 +155,12 @@ detection_zone_node_path = NodePath("../PlayerDetectionZone")
 
 [node name="KinematicBody2D" type="KinematicBody2D" parent="."]
 script = ExtResource( 13 )
+remote_path = NodePath("..")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KinematicBody2D"]
-shape = SubResource( 8 )
-
-[node name="RemoteTransform2D" type="RemoteTransform2D" parent="KinematicBody2D"]
-remote_path = NodePath("../..")
-[connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
+shape = SubResource( 14 )
 [connection signal="area_entered" from="Hurtbox" to="KinematicBody2D" method="_on_Hurtbox_area_entered"]
+[connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
 [connection signal="invincibility_stopped" from="Hurtbox" to="." method="_on_Hurtbox_invincibility_stopped"]
 [connection signal="no_health" from="Stats" to="." method="_on_Stats_no_health"]
 [connection signal="player_detected" from="PlayerDetectionZone" to="BatStates" method="_on_PlayerDetectionZone_player_detected"]

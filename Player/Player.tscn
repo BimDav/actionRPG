@@ -16,7 +16,7 @@
 shader = ExtResource( 9 )
 shader_param/active = false
 
-[sub_resource type="Animation" id=52]
+[sub_resource type="Animation" id=2]
 resource_name = "AttackDown"
 length = 0.4
 tracks/0/type = "value"
@@ -788,7 +788,7 @@ frame = 36
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 pause_mode = 2
-anims/AttackDown = SubResource( 52 )
+anims/AttackDown = SubResource( 2 )
 anims/AttackLeft = SubResource( 3 )
 anims/AttackRight = SubResource( 4 )
 anims/AttackUp = SubResource( 5 )
@@ -852,23 +852,19 @@ position = Vector2( -0.840897, -7.25273 )
 shape = SubResource( 50 )
 
 [node name="PlayerStates" parent="." instance=ExtResource( 10 )]
-kbody_node_path = NodePath("../Node/KinematicBody2D")
+kbody_node_path = NodePath("../KinematicBody2D")
 animation_tree_node_path = NodePath("../AnimationTree")
 sword_hitbox_node_path = NodePath("../HitboxPivot/SwordHitbox")
 hurtbox_node_path = NodePath("../Hurtbox")
 
-[node name="Node" type="Node" parent="."]
-
-[node name="KinematicBody2D" type="KinematicBody2D" parent="Node"]
+[node name="KinematicBody2D" type="KinematicBody2D" parent="."]
 script = ExtResource( 11 )
+remote_path = NodePath("..")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Node/KinematicBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KinematicBody2D"]
 position = Vector2( -0.106323, 0.941025 )
 rotation = -1.5708
 shape = SubResource( 51 )
-
-[node name="RemoteTransform2D" type="RemoteTransform2D" parent="Node/KinematicBody2D"]
-remote_path = NodePath("../../..")
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
 [connection signal="invincibility_started" from="Hurtbox" to="." method="_on_Hurtbox_invincibility_started"]
 [connection signal="invincibility_stopped" from="Hurtbox" to="." method="_on_Hurtbox_invincibility_stopped"]

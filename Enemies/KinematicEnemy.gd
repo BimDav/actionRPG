@@ -1,4 +1,5 @@
-extends KinematicBody2D
+tool
+extends KinematicComponent2D
 
 class_name KinematicEnemy
 

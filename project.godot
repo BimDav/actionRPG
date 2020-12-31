@@ -30,6 +30,11 @@ _global_script_classes=[ {
 "path": "res://Hurtboxes and hitboxes/Hitbox.gd"
 }, {
 "base": "KinematicBody2D",
+"class": "KinematicComponent2D",
+"language": "GDScript",
+"path": "res://KinematicComponent2D.gd"
+}, {
+"base": "KinematicComponent2D",
 "class": "KinematicEnemy",
 "language": "GDScript",
 "path": "res://Enemies/KinematicEnemy.gd"
@@ -49,6 +54,7 @@ _global_script_class_icons={
 "Enemy": "",
 "GitAPI": "",
 "Hitbox": "",
+"KinematicComponent2D": "",
 "KinematicEnemy": "",
 "State": "",
 "StateFactory": ""
