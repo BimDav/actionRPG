@@ -4,6 +4,7 @@ extends StateFactory
 export(NodePath) var kbody_node_path = ""
 export(NodePath) var animated_sprite_node_path = ""
 export(NodePath) var detection_zone_node_path = ""
+export(NodePath) var soft_collision_node_path = ""
 
 func _ready():
 	var node = get_node(kbody_node_path)
@@ -18,6 +19,10 @@ func _ready():
 	for s in get_children():
 		if "player_detection_zone" in s:
 			s.player_detection_zone = node
+	node = get_node(soft_collision_node_path)
+	for s in get_children():
+		if "soft_collision" in s:
+			s.soft_collision = node
 
 func _on_PlayerDetectionZone_player_detected():
 	state.handle_event("player_detected")
@@ -37,4 +42,6 @@ func _get_configuration_warning() -> String:
 		warnings.append("Set a path to the AnimatedSprite referenced")
 	if detection_zone_node_path == "":
 		warnings.append("Set a path to the DetectionZone referenced")
+	if soft_collision_node_path == "":
+		warnings.append("Set a path to the SoftCollision referenced")
 	return warnings.join("\n")

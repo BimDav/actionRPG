@@ -858,6 +858,7 @@ sword_hitbox_node_path = NodePath("../HitboxPivot/SwordHitbox")
 hurtbox_node_path = NodePath("../Hurtbox")
 
 [node name="KinematicBody2D" type="KinematicBody2D" parent="."]
+collision_layer = 2
 script = ExtResource( 11 )
 remote_path = NodePath("..")
 

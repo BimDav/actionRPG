@@ -102,7 +102,7 @@ script = ExtResource( 4 )
 material = SubResource( 1 )
 frames = SubResource( 7 )
 animation = "Fly"
-frame = 2
+frame = 3
 playing = true
 offset = Vector2( 0, -12 )
 
@@ -152,15 +152,17 @@ anims/Stop = SubResource( 13 )
 kbody_node_path = NodePath("../KinematicBody2D")
 animated_sprite_node_path = NodePath("../AnimatedSprite")
 detection_zone_node_path = NodePath("../PlayerDetectionZone")
+soft_collision_node_path = NodePath("../SoftCollision")
 
 [node name="KinematicBody2D" type="KinematicBody2D" parent="."]
+collision_layer = 16
 script = ExtResource( 13 )
 remote_path = NodePath("..")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KinematicBody2D"]
 shape = SubResource( 14 )
-[connection signal="area_entered" from="Hurtbox" to="KinematicBody2D" method="_on_Hurtbox_area_entered"]
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
+[connection signal="area_entered" from="Hurtbox" to="KinematicBody2D" method="_on_Hurtbox_area_entered"]
 [connection signal="invincibility_stopped" from="Hurtbox" to="." method="_on_Hurtbox_invincibility_stopped"]
 [connection signal="no_health" from="Stats" to="." method="_on_Stats_no_health"]
 [connection signal="player_detected" from="PlayerDetectionZone" to="BatStates" method="_on_PlayerDetectionZone_player_detected"]

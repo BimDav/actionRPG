@@ -17,6 +17,15 @@ func move_and_slide(linear_velocity: Vector2, up_direction: Vector2 = Vector2( 0
 	set_transform(base_transform)
 	return ret
 	
+	
+func move_and_collide(rel_vec: Vector2, infinite_inertia: bool = true, 
+exclude_raycast_shapes: bool = true, test_only: bool = false) -> KinematicCollision2D:
+	var ret = .move_and_collide(rel_vec, infinite_inertia, exclude_raycast_shapes,
+								test_only)
+	var new_transform = get_global_transform()
+	remote_node.set_global_transform(new_transform)
+	set_transform(base_transform)
+	return ret	
 
 func _get_configuration_warning() -> String:
 	var warnings = PoolStringArray()

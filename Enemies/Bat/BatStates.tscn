@@ -6,17 +6,18 @@
 [ext_resource path="res://Enemies/Bat/Wander.gd" type="Script" id=4]
 [ext_resource path="res://Enemies/Bat/WanderController.tscn" type="PackedScene" id=5]
 
-[node name="BatStates" type="Node"]
+[node name="BatStates" type="Node2D"]
 script = ExtResource( 1 )
 init_state_path = NodePath("Idle")
 
 [node name="Idle" type="Node" parent="."]
 script = ExtResource( 2 )
 
-[node name="Wander" type="Node" parent="."]
+[node name="Wander" type="Node2D" parent="."]
 script = ExtResource( 4 )
 
 [node name="WanderController" parent="Wander" instance=ExtResource( 5 )]
 
 [node name="Chase" type="Node" parent="."]
 script = ExtResource( 3 )
+[connection signal="new_target_position" from="Wander/WanderController" to="." method="_on_WanderController_new_target_position"]

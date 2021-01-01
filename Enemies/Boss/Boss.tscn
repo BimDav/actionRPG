@@ -61,17 +61,17 @@ animations = [ {
 "speed": 8.0
 } ]
 
-[sub_resource type="CapsuleShape2D" id=10]
+[sub_resource type="CapsuleShape2D" id=9]
 radius = 11.6409
 height = 6.81674
 
-[sub_resource type="CapsuleShape2D" id=11]
+[sub_resource type="CapsuleShape2D" id=10]
 height = 7.94362
 
-[sub_resource type="CircleShape2D" id=12]
+[sub_resource type="CircleShape2D" id=11]
 radius = 5.03393
 
-[sub_resource type="Animation" id=13]
+[sub_resource type="Animation" id=12]
 length = 0.2
 loop = true
 tracks/0/type = "value"
@@ -87,7 +87,7 @@ tracks/0/keys = {
 "values": [ true, false ]
 }
 
-[sub_resource type="Animation" id=14]
+[sub_resource type="Animation" id=13]
 length = 0.1
 tracks/0/type = "value"
 tracks/0/path = NodePath("AnimatedSprite:material:shader_param/active")
@@ -102,7 +102,7 @@ tracks/0/keys = {
 "values": [ false ]
 }
 
-[sub_resource type="Animation" id=15]
+[sub_resource type="Animation" id=14]
 resource_name = "CutScene"
 length = 6.0
 tracks/0/type = "value"
@@ -154,7 +154,7 @@ tracks/3/keys = {
 "values": [ Vector2( 0, 0 ), Vector2( 0, 0 ), Vector2( 0, 8 ) ]
 }
 
-[sub_resource type="CircleShape2D" id=9]
+[sub_resource type="CircleShape2D" id=15]
 radius = 6.87126
 
 [node name="Boss" type="Node2D"]
@@ -171,7 +171,7 @@ process_material = SubResource( 1 )
 material = SubResource( 2 )
 frames = SubResource( 8 )
 animation = "Fly"
-frame = 2
+frame = 1
 playing = true
 offset = Vector2( 0, -12 )
 
@@ -185,7 +185,7 @@ collision_layer = 8
 
 [node name="CollisionShape2D" parent="Hurtbox" index="0"]
 position = Vector2( 0.0936394, -7.11696 )
-shape = SubResource( 10 )
+shape = SubResource( 9 )
 
 [node name="Timer" parent="Hurtbox" index="1"]
 wait_time = 0.5
@@ -198,13 +198,13 @@ collision_mask = 4
 
 [node name="CollisionShape2D" parent="Hitbox" index="0"]
 position = Vector2( 0.0807722, -18.3067 )
-shape = SubResource( 11 )
+shape = SubResource( 10 )
 
 [node name="SoftCollision" parent="." instance=ExtResource( 7 )]
 visible = false
 
 [node name="CollisionShape2D" parent="SoftCollision" index="0"]
-shape = SubResource( 12 )
+shape = SubResource( 11 )
 
 [node name="RandomObjectGenerator" parent="." instance=ExtResource( 5 )]
 position = Vector2( 0, -14 )
@@ -215,23 +215,26 @@ position = Vector2( 4, -20 )
 heart_ratio = 1.0
 
 [node name="BlinkAnimationPlayer" type="AnimationPlayer" parent="."]
-anims/Start = SubResource( 13 )
-anims/Stop = SubResource( 14 )
+anims/Start = SubResource( 12 )
+anims/Stop = SubResource( 13 )
 
 [node name="BossStates" parent="." instance=ExtResource( 6 )]
-kbody_node_path = NodePath("../KinematicBody2D")
+kbody_node_path = NodePath("../KinematicEnemy")
 animated_sprite_node_path = NodePath("../AnimatedSprite")
 
 [node name="CutScenePlayer" type="AnimationPlayer" parent="."]
 pause_mode = 2
-anims/CutScene = SubResource( 15 )
+anims/CutScene = SubResource( 14 )
 
-[node name="KinematicBody2D" type="KinematicBody2D" parent="."]
+[node name="KinematicEnemy" type="KinematicBody2D" parent="."]
+collision_layer = 16
 script = ExtResource( 11 )
+remote_path = NodePath("..")
+max_speed = 2.0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="KinematicBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KinematicEnemy"]
 visible = false
-shape = SubResource( 9 )
+shape = SubResource( 15 )
 [connection signal="no_health" from="Stats" to="." method="_on_Stats_no_health"]
 [connection signal="hit_wall" from="BossStates" to="." method="_on_BossStates_hit_wall"]
 [connection signal="animation_finished" from="CutScenePlayer" to="." method="_on_CutScenePlayer_animation_finished"]

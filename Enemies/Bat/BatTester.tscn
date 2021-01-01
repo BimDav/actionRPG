@@ -1,0 +1,47 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://WhiteColor.shader" type="Shader" id=1]
+[ext_resource path="res://BatTester.gd" type="Script" id=2]
+[ext_resource path="res://Enemies/Bat/Bat.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Enemies/Bat/SimulatedPlayer.gd" type="Script" id=4]
+[ext_resource path="res://icon.png" type="Texture" id=5]
+
+[sub_resource type="ShaderMaterial" id=1]
+resource_local_to_scene = true
+shader = ExtResource( 1 )
+shader_param/active = false
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 1.80615
+
+[node name="BatTester" type="Node"]
+script = ExtResource( 2 )
+
+[node name="Bat" parent="." instance=ExtResource( 3 )]
+position = Vector2( 130.25, 100.68 )
+
+[node name="AnimatedSprite" parent="Bat" index="0"]
+material = SubResource( 1 )
+frame = 4
+
+[node name="SimulatedPlayer" type="KinematicBody2D" parent="."]
+collision_layer = 2
+script = ExtResource( 4 )
+
+[node name="CollisionShape" type="CollisionShape2D" parent="SimulatedPlayer"]
+shape = SubResource( 2 )
+
+[node name="StartPosition" type="Sprite" parent="."]
+scale = Vector2( 0.1, 0.1 )
+texture = ExtResource( 5 )
+
+[node name="WanderTarget" type="Sprite" parent="."]
+self_modulate = Color( 0.74902, 0.121569, 0.121569, 1 )
+scale = Vector2( 0.1, 0.1 )
+texture = ExtResource( 5 )
+[connection signal="state_changed" from="Bat/BatStates" to="." method="_on_BatStates_state_changed"]
+[connection signal="new_target_position" from="Bat/BatStates/Wander/WanderController" to="." method="_on_WanderController_new_target_position"]
+
+[editable path="Bat"]
+
+[editable path="Bat/BatStates"]
