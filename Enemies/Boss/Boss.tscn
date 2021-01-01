@@ -171,7 +171,7 @@ process_material = SubResource( 1 )
 material = SubResource( 2 )
 frames = SubResource( 8 )
 animation = "Fly"
-frame = 1
+frame = 4
 playing = true
 offset = Vector2( 0, -12 )
 
@@ -179,7 +179,6 @@ offset = Vector2( 0, -12 )
 texture = ExtResource( 10 )
 
 [node name="Hurtbox" parent="." instance=ExtResource( 3 )]
-visible = false
 position = Vector2( 0, -15 )
 collision_layer = 8
 
@@ -201,7 +200,6 @@ position = Vector2( 0.0807722, -18.3067 )
 shape = SubResource( 10 )
 
 [node name="SoftCollision" parent="." instance=ExtResource( 7 )]
-visible = false
 
 [node name="CollisionShape2D" parent="SoftCollision" index="0"]
 shape = SubResource( 11 )
@@ -230,12 +228,17 @@ anims/CutScene = SubResource( 14 )
 collision_layer = 16
 script = ExtResource( 11 )
 remote_path = NodePath("..")
+acceleration = 0.2
 max_speed = 2.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KinematicEnemy"]
-visible = false
 shape = SubResource( 15 )
+[connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
+[connection signal="area_entered" from="Hurtbox" to="KinematicEnemy" method="_on_Hurtbox_area_entered"]
+[connection signal="invincibility_stopped" from="Hurtbox" to="." method="_on_Hurtbox_invincibility_stopped"]
 [connection signal="no_health" from="Stats" to="." method="_on_Stats_no_health"]
+[connection signal="generated_object" from="RandomObjectGenerator" to="." method="_on_RandomObjectGenerators_generated_object"]
+[connection signal="generated_object" from="RandomObjectGenerator2" to="." method="_on_RandomObjectGenerators_generated_object"]
 [connection signal="hit_wall" from="BossStates" to="." method="_on_BossStates_hit_wall"]
 [connection signal="animation_finished" from="CutScenePlayer" to="." method="_on_CutScenePlayer_animation_finished"]
 

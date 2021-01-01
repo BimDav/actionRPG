@@ -25,3 +25,4 @@ func _on_BossStates_hit_wall():
 
 func _on_CutScenePlayer_animation_finished(_anim_name):
 	get_tree().paused = false
+
