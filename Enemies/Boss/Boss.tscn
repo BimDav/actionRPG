@@ -137,10 +137,13 @@ local_coords = false
 process_material = SubResource( 1 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+self_modulate = Color( 0.909804, 0.814902, 0.836863, 1 )
 material = SubResource( 2 )
+position = Vector2( 0, 8 )
+scale = Vector2( 2, 2 )
 frames = SubResource( 8 )
 animation = "Fly"
-frame = 4
+frame = 1
 playing = true
 offset = Vector2( 0, -12 )
 
@@ -196,6 +199,7 @@ script = ExtResource( 12 )
 collision_layer = 8
 
 [node name="CollisionShape2D" parent="HurtSystem/Hurtbox" index="0"]
+position = Vector2( 0, -21.327 )
 shape = SubResource( 9 )
 
 [node name="Stats" parent="HurtSystem" index="1"]

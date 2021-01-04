@@ -1,11 +1,61 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://Hurtboxes and hitboxes/BlinkAnimationPlayer.gd" type="Script" id=1]
 [ext_resource path="res://Stats.tscn" type="PackedScene" id=2]
-[ext_resource path="res://BlinkAnimation.tres" type="Animation" id=3]
 [ext_resource path="res://Hurtboxes and hitboxes/Hurtbox.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Hurtboxes and hitboxes/HurtSystem.gd" type="Script" id=5]
-[ext_resource path="res://Hurtboxes and hitboxes/BlinkAnimationtStop.tres" type="Animation" id=6]
+
+[sub_resource type="Animation" id=1]
+resource_name = "Start"
+length = 0.2
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(":material:shader_param/active")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "BlinkAnimationStop"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath(":material:shader_param/active")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+
+[sub_resource type="GDScript" id=3]
+script/source = "tool
+extends AnimationPlayer
+
+export(NodePath) var sprite_node_path = \"\"
+
+func _ready():
+	var path = String(sprite_node_path) + \":material:shader_param/active\"
+	var blink = get_animation(\"BlinkAnimation\")
+	blink.track_set_path(0, path)
+	blink = get_animation(\"BlinkAnimationStop\")
+	blink.track_set_path(0, path)
+	
+func _get_configuration_warning() -> String:
+	var warnings = PoolStringArray()
+	if sprite_node_path == \"\":
+		warnings.append(\"Set a path to the Sprite referenced\")
+	return warnings.join(\"\\n\")
+"
 
 [node name="HurtSystem" type="Node2D"]
 script = ExtResource( 5 )
@@ -19,9 +69,10 @@ wait_time = 0.5
 
 [node name="BlinkAnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath(".")
-anims/BlinkAnimation = ExtResource( 3 )
-anims/BlinkAnimationStop = ExtResource( 6 )
-script = ExtResource( 1 )
+anims/BlinkAnimation = SubResource( 1 )
+anims/BlinkAnimationStop = SubResource( 2 )
+script = SubResource( 3 )
+sprite_node_path = NodePath("")
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
 [connection signal="invincibility_started" from="Hurtbox" to="." method="_on_Hurtbox_invincibility_started"]
 [connection signal="invincibility_stopped" from="Hurtbox" to="." method="_on_Hurtbox_invincibility_stopped"]

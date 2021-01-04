@@ -29,6 +29,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Hurtboxes and hitboxes/Hitbox.gd"
 }, {
+"base": "Node2D",
+"class": "HurtSystem",
+"language": "GDScript",
+"path": "res://Hurtboxes and hitboxes/HurtSystem.gd"
+}, {
 "base": "KinematicBody2D",
 "class": "KinematicComponent2D",
 "language": "GDScript",
@@ -54,6 +59,7 @@ _global_script_class_icons={
 "DeathEffectLauncher": "",
 "GitAPI": "",
 "Hitbox": "",
+"HurtSystem": "",
 "KinematicComponent2D": "",
 "KinematicEnemy": "",
 "State": "",

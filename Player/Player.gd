@@ -9,8 +9,6 @@ var stats = PlayerStats
 onready var animation_player = $AnimationPlayer
 onready var animation_tree = $AnimationTree
 onready var animation_state = animation_tree.get("parameters/playback")
-onready var hurtbox = $Hurtbox
-onready var blink_animation_player = $BlinkAnimationPlayer
 onready var player_states = $PlayerStates
 
 
@@ -25,14 +23,7 @@ func _on_attack_animation_finished():
 func _on_roll_animation_finished():
 	player_states._on_roll_animation_finished()
 
-func _on_Hurtbox_area_entered(area):
-	stats.health -= area.damage
+func _on_Hurtbox_area_entered(_area):
 	var player_hurt_sound_node = player_hurt_sound.instance()
 	emit_signal("player_hurt_sound_launch", player_hurt_sound_node)
 
-
-func _on_Hurtbox_invincibility_started():
-	blink_animation_player.play("Start")
-
-func _on_Hurtbox_invincibility_stopped():
-	blink_animation_player.play("Stop")
