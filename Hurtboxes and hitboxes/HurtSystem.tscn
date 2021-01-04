@@ -1,22 +1,29 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Hurtboxes and hitboxes/BlinkAnimationPlayer.gd" type="Script" id=1]
 [ext_resource path="res://Stats.tscn" type="PackedScene" id=2]
 [ext_resource path="res://BlinkAnimation.tres" type="Animation" id=3]
 [ext_resource path="res://Hurtboxes and hitboxes/Hurtbox.tscn" type="PackedScene" id=4]
-
-[sub_resource type="Animation" id=1]
-resource_name = "Blink"
+[ext_resource path="res://Hurtboxes and hitboxes/HurtSystem.gd" type="Script" id=5]
+[ext_resource path="res://Hurtboxes and hitboxes/BlinkAnimationtStop.tres" type="Animation" id=6]
 
 [node name="HurtSystem" type="Node2D"]
+script = ExtResource( 5 )
 
 [node name="Hurtbox" parent="." instance=ExtResource( 4 )]
+
+[node name="Timer" parent="Hurtbox" index="1"]
+wait_time = 0.5
 
 [node name="Stats" parent="." instance=ExtResource( 2 )]
 
 [node name="BlinkAnimationPlayer" type="AnimationPlayer" parent="."]
-anims/Blink = SubResource( 1 )
+root_node = NodePath(".")
 anims/BlinkAnimation = ExtResource( 3 )
+anims/BlinkAnimationStop = ExtResource( 6 )
 script = ExtResource( 1 )
+[connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
+[connection signal="invincibility_started" from="Hurtbox" to="." method="_on_Hurtbox_invincibility_started"]
+[connection signal="invincibility_stopped" from="Hurtbox" to="." method="_on_Hurtbox_invincibility_stopped"]
 
 [editable path="Hurtbox"]

@@ -1,4 +1,4 @@
-extends Enemy
+extends Node2D
 
 signal dead
 signal hit_wall
