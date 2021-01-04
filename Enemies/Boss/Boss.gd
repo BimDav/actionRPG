@@ -9,7 +9,6 @@ onready var states = $BossStates
 
 func _on_Stats_no_health():
 	emit_signal("dead")
-	._on_Stats_no_health()
 
 
 func _on_Gate_gate_closed(body):

@@ -14,7 +14,7 @@
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 9 )
-shader_param/active = false
+shader_param/active = true
 
 [sub_resource type="Animation" id=2]
 resource_name = "AttackDown"
@@ -861,6 +861,9 @@ hurtbox_node_path = NodePath("../Hurtbox")
 collision_layer = 2
 script = ExtResource( 11 )
 remote_path = NodePath("..")
+acceleration = 2.2
+max_speed = 2
+friction = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KinematicBody2D"]
 position = Vector2( -0.106323, 0.941025 )

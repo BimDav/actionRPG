@@ -27,6 +27,5 @@ shape = SubResource( 1 )
 position = Vector2( 8, 8 )
 heart_ratio = 0.1
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
-[connection signal="generated_object" from="RandomObjectGenerator" to="." method="_on_RandomObjectGenerators_generated_object"]
 
 [editable path="Hurtbox"]
