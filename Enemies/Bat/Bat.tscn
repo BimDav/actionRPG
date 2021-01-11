@@ -5,7 +5,7 @@
 [ext_resource path="res://Player/PlayerDetectionZone.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Hurtboxes and hitboxes/Hitbox.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Hurtboxes and hitboxes/SoftCollision.tscn" type="PackedScene" id=8]
-[ext_resource path="res://DeathEffectLauncher.gd" type="Script" id=9]
+[ext_resource path="res://Enemies/DeathEffectLauncher.gd" type="Script" id=9]
 [ext_resource path="res://World/RandomObjectGenerator.tscn" type="PackedScene" id=10]
 [ext_resource path="res://WhiteColor.shader" type="Shader" id=11]
 [ext_resource path="res://Enemies/Bat/BatStates.tscn" type="PackedScene" id=12]
@@ -15,7 +15,7 @@
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
 shader = ExtResource( 11 )
-shader_param/active = false
+shader_param/active = true
 
 [sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 1 )
@@ -45,19 +45,19 @@ animations = [ {
 "speed": 8.0
 } ]
 
-[sub_resource type="CircleShape2D" id=9]
+[sub_resource type="CircleShape2D" id=8]
 radius = 59.4783
 
-[sub_resource type="CircleShape2D" id=10]
+[sub_resource type="CircleShape2D" id=9]
 radius = 6.0
 
-[sub_resource type="CircleShape2D" id=11]
+[sub_resource type="CircleShape2D" id=10]
 radius = 5.03393
 
-[sub_resource type="CircleShape2D" id=14]
+[sub_resource type="CircleShape2D" id=11]
 radius = 4.10088
 
-[sub_resource type="CapsuleShape2D" id=8]
+[sub_resource type="CapsuleShape2D" id=12]
 radius = 7.0
 height = 6.0
 
@@ -78,19 +78,19 @@ texture = ExtResource( 2 )
 
 [node name="CollisionShape2D" parent="PlayerDetectionZone" index="0"]
 modulate = Color( 0.592157, 0.447059, 0.454902, 0.235294 )
-shape = SubResource( 9 )
+shape = SubResource( 8 )
 
 [node name="Hitbox" parent="." instance=ExtResource( 7 )]
 collision_mask = 4
 
 [node name="CollisionShape2D" parent="Hitbox" index="0"]
 position = Vector2( 0.10511, -15.7668 )
-shape = SubResource( 10 )
+shape = SubResource( 9 )
 
 [node name="SoftCollision" parent="." instance=ExtResource( 8 )]
 
 [node name="CollisionShape2D" parent="SoftCollision" index="0"]
-shape = SubResource( 11 )
+shape = SubResource( 10 )
 
 [node name="RandomObjectGenerator" parent="." instance=ExtResource( 10 )]
 position = Vector2( 0, -14 )
@@ -108,7 +108,7 @@ script = ExtResource( 13 )
 remote_path = NodePath("..")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KinematicBody2D"]
-shape = SubResource( 14 )
+shape = SubResource( 11 )
 
 [node name="DeathEffectLauncher" type="Node2D" parent="."]
 position = Vector2( 0, -14 )
@@ -121,7 +121,7 @@ collision_layer = 8
 
 [node name="CollisionShape2D" parent="HurtSystem/Hurtbox" index="0"]
 position = Vector2( 0, -12.6134 )
-shape = SubResource( 8 )
+shape = SubResource( 12 )
 
 [node name="Stats" parent="HurtSystem" index="1"]
 max_health = 2

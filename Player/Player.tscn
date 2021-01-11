@@ -730,24 +730,24 @@ start_node = "Idle"
 [sub_resource type="CapsuleShape2D" id=46]
 height = 12.0
 
-[sub_resource type="CapsuleShape2D" id=50]
+[sub_resource type="CapsuleShape2D" id=47]
 radius = 8.28668
 height = 6.7527
 
-[sub_resource type="CapsuleShape2D" id=51]
+[sub_resource type="CapsuleShape2D" id=48]
 radius = 5.81877
 height = 4.79184
 
-[sub_resource type="CapsuleShape2D" id=47]
+[sub_resource type="CapsuleShape2D" id=49]
 radius = 5.02821
 height = 4.64222
 
-[sub_resource type="Animation" id=52]
+[sub_resource type="Animation" id=50]
 resource_name = "Start"
 length = 0.2
 loop = true
 tracks/0/type = "value"
-tracks/0/path = NodePath(":material:shader_param/active")
+tracks/0/path = NodePath("../../Sprite:material:shader_param/active")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -759,11 +759,11 @@ tracks/0/keys = {
 "values": [ true, false ]
 }
 
-[sub_resource type="Animation" id=53]
+[sub_resource type="Animation" id=51]
 resource_name = "BlinkAnimationStop"
 length = 0.1
 tracks/0/type = "value"
-tracks/0/path = NodePath(":material:shader_param/active")
+tracks/0/path = NodePath("../../Sprite:material:shader_param/active")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -775,7 +775,7 @@ tracks/0/keys = {
 "values": [ false ]
 }
 
-[sub_resource type="GDScript" id=54]
+[sub_resource type="GDScript" id=52]
 script/source = "tool
 extends AnimationPlayer
 
@@ -859,7 +859,7 @@ collision_mask = 64
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Objects"]
 position = Vector2( -0.840897, -7.25273 )
-shape = SubResource( 50 )
+shape = SubResource( 47 )
 
 [node name="PlayerStates" parent="." instance=ExtResource( 10 )]
 kbody_node_path = NodePath("../KinematicBody2D")
@@ -878,7 +878,7 @@ friction = 2
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KinematicBody2D"]
 position = Vector2( -0.106323, 0.941025 )
 rotation = -1.5708
-shape = SubResource( 51 )
+shape = SubResource( 48 )
 
 [node name="HurtSystem" parent="." instance=ExtResource( 12 )]
 script = ExtResource( 16 )
@@ -888,15 +888,15 @@ collision_layer = 4
 
 [node name="CollisionShape2D" parent="HurtSystem/Hurtbox" index="0"]
 position = Vector2( 0, -5.959 )
-shape = SubResource( 47 )
+shape = SubResource( 49 )
 
 [node name="Timer" parent="HurtSystem/Hurtbox" index="1"]
 wait_time = 1.5
 
 [node name="BlinkAnimationPlayer" parent="HurtSystem" index="2"]
-anims/BlinkAnimation = SubResource( 52 )
-anims/BlinkAnimationStop = SubResource( 53 )
-script = SubResource( 54 )
+anims/BlinkAnimation = SubResource( 50 )
+anims/BlinkAnimationStop = SubResource( 51 )
+script = SubResource( 52 )
 sprite_node_path = NodePath("../../Sprite")
 [connection signal="area_entered" from="HurtSystem/Hurtbox" to="." method="_on_Hurtbox_area_entered"]
 

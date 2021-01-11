@@ -17,7 +17,7 @@ _global_script_classes=[ {
 "base": "Node2D",
 "class": "DeathEffectLauncher",
 "language": "GDScript",
-"path": "res://DeathEffectLauncher.gd"
+"path": "res://Enemies/DeathEffectLauncher.gd"
 }, {
 "base": "",
 "class": "GitAPI",

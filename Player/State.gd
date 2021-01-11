@@ -7,9 +7,6 @@ var state_factory = null
 
 func _ready():
 	state_factory = get_parent()
-
-func set_main_ref(main_ref):
-	main = main_ref
 	
 func enter(_args):
 	pass
