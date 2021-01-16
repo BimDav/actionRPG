@@ -8,18 +8,15 @@ onready var shadow_sprite = $Bush/ShadowSprite
 const GrassEffect = preload("res://Effects/GrassEffect.tscn")
 const EnemyDeathEffect = preload("res://Effects/EnemyDeathEffect.tscn")
 
-signal grass_effect_launch(grass_effect_node)
-signal enemy_death_effect_launch(death_effect_node)
-
 func create_grass_effect():
 	var grass_effect = GrassEffect.instance()
 	grass_effect.set_transform(get_transform())
-	emit_signal("grass_effect_launch", grass_effect)
+	GameEvents.emit_signal("add_child_asked", grass_effect)
 	
 func create_death_effect():
 	var death_effect = EnemyDeathEffect.instance()
 	death_effect.set_transform(get_transform())
-	emit_signal("enemy_death_effect_launch", death_effect)	
+	GameEvents.emit_signal("add_child_asked", death_effect)	
 
 func _on_Gate_body_exited(body):
 	if body.global_position.y <= global_position.y:

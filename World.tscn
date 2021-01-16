@@ -908,8 +908,8 @@ position = Vector2( 0, 0 )
 
 [node name="TextBegin" parent="." instance=ExtResource( 14 )]
 [connection signal="boss_cut_scene" from="ObjectsYsort/Boss" to="Camera2D" method="_on_Boss_boss_cut_scene"]
-[connection signal="dead" from="ObjectsYsort/Boss" to="ObjectsYsort/Gate" method="_on_Boss_dead"]
 [connection signal="dead" from="ObjectsYsort/Boss" to="." method="_on_Boss_dead"]
+[connection signal="dead" from="ObjectsYsort/Boss" to="ObjectsYsort/Gate" method="_on_Boss_dead"]
 [connection signal="hit_wall" from="ObjectsYsort/Boss" to="Camera2D" method="_on_Boss_hit_wall"]
 [connection signal="gate_closed" from="ObjectsYsort/Gate" to="ObjectsYsort/Boss" method="_on_Gate_gate_closed"]
 
