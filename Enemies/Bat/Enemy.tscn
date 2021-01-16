@@ -1,95 +1,43 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Enemies/DeathEffectLauncher.gd" type="Script" id=1]
 [ext_resource path="res://Enemies/KinematicEnemy.gd" type="Script" id=2]
 [ext_resource path="res://Shadows/SmallShadow.png" type="Texture" id=3]
-[ext_resource path="res://Enemies/Bat/Bat.png" type="Texture" id=4]
 [ext_resource path="res://WhiteColor.shader" type="Shader" id=5]
 [ext_resource path="res://Hurtboxes and hitboxes/Hitbox.tscn" type="PackedScene" id=6]
-[ext_resource path="res://Player/PlayerDetectionZone.tscn" type="PackedScene" id=7]
 [ext_resource path="res://World/RandomObjectGenerator.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Hurtboxes and hitboxes/HurtSystem.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Hurtboxes and hitboxes/SoftCollision.tscn" type="PackedScene" id=10]
 
 [sub_resource type="ShaderMaterial" id=1]
-resource_local_to_scene = true
 shader = ExtResource( 5 )
-shader_param/active = true
+shader_param/active = false
 
-[sub_resource type="AtlasTexture" id=2]
-atlas = ExtResource( 4 )
-region = Rect2( 0, 0, 16, 24 )
-
-[sub_resource type="AtlasTexture" id=3]
-atlas = ExtResource( 4 )
-region = Rect2( 16, 0, 16, 24 )
-
-[sub_resource type="AtlasTexture" id=4]
-atlas = ExtResource( 4 )
-region = Rect2( 32, 0, 16, 24 )
-
-[sub_resource type="AtlasTexture" id=5]
-atlas = ExtResource( 4 )
-region = Rect2( 48, 0, 16, 24 )
-
-[sub_resource type="AtlasTexture" id=6]
-atlas = ExtResource( 4 )
-region = Rect2( 64, 0, 16, 24 )
-
-[sub_resource type="SpriteFrames" id=7]
-animations = [ {
-"frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ) ],
-"loop": true,
-"name": "Fly",
-"speed": 8.0
-} ]
-
-[sub_resource type="CircleShape2D" id=8]
-radius = 59.4783
-
-[sub_resource type="CircleShape2D" id=9]
-radius = 6.0
-
-[sub_resource type="CircleShape2D" id=10]
+[sub_resource type="CircleShape2D" id=2]
 radius = 5.03393
 
-[sub_resource type="CircleShape2D" id=11]
+[sub_resource type="CircleShape2D" id=3]
 radius = 4.10088
-
-[sub_resource type="CapsuleShape2D" id=12]
-radius = 7.0
-height = 6.0
 
 [node name="Enemy" type="Node2D"]
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 material = SubResource( 1 )
-frames = SubResource( 7 )
-animation = "Fly"
-frame = 4
 playing = true
-offset = Vector2( 0, -12 )
 
 [node name="ShadowSprite" type="Sprite" parent="."]
 texture = ExtResource( 3 )
-
-[node name="PlayerDetectionZone" parent="." instance=ExtResource( 7 )]
-
-[node name="CollisionShape2D" parent="PlayerDetectionZone" index="0"]
-modulate = Color( 0.592157, 0.447059, 0.454902, 0.235294 )
-shape = SubResource( 8 )
 
 [node name="Hitbox" parent="." instance=ExtResource( 6 )]
 collision_mask = 4
 
 [node name="CollisionShape2D" parent="Hitbox" index="0"]
 position = Vector2( 0.10511, -15.7668 )
-shape = SubResource( 9 )
 
 [node name="SoftCollision" parent="." instance=ExtResource( 10 )]
 
 [node name="CollisionShape2D" parent="SoftCollision" index="0"]
-shape = SubResource( 10 )
+shape = SubResource( 2 )
 
 [node name="RandomObjectGenerator" parent="." instance=ExtResource( 8 )]
 position = Vector2( 0, -14 )
@@ -101,7 +49,7 @@ script = ExtResource( 2 )
 remote_path = NodePath("../../Enemy")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KinematicBody2D"]
-shape = SubResource( 11 )
+shape = SubResource( 3 )
 
 [node name="DeathEffectLauncher" type="Node2D" parent="."]
 position = Vector2( 0, -14 )
@@ -114,17 +62,14 @@ collision_layer = 8
 
 [node name="CollisionShape2D" parent="HurtSystem/Hurtbox" index="0"]
 position = Vector2( 0, -12.6134 )
-shape = SubResource( 12 )
 
 [node name="Stats" parent="HurtSystem" index="1"]
 max_health = 2
 
 [node name="BlinkAnimationPlayer" parent="HurtSystem" index="2"]
-sprite_node_path = NodePath("../../../Enemy/AnimatedSprite")
+sprite_node_path = NodePath("../../AnimatedSprite")
 [connection signal="area_entered" from="HurtSystem/Hurtbox" to="KinematicBody2D" method="_on_Hurtbox_area_entered"]
 [connection signal="no_health" from="HurtSystem/Stats" to="DeathEffectLauncher" method="_on_Stats_no_health"]
-
-[editable path="PlayerDetectionZone"]
 
 [editable path="Hitbox"]
 

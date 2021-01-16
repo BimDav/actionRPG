@@ -12,7 +12,8 @@ onready var collision_shape = $CollisionShape2D
 
 func _on_Hurtbox_area_entered(_area):
 	var effect = hit_effect.instance()
-	self.add_child(effect)
+	effect.set_global_transform(get_global_transform())
+	GameEvents.emit_signal("add_child_asked", effect)
 	self.invincible = true
 	emit_signal("invincibility_started")
 	timer.start()

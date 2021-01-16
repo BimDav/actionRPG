@@ -1,7 +1,5 @@
 extends Node2D
 
-signal player_hurt_sound_launch(node)
-
 const player_hurt_sound = preload("res://Player/PlayerHurtSound.tscn")
 
 var stats = PlayerStats
@@ -25,5 +23,5 @@ func _on_roll_animation_finished():
 
 func _on_Hurtbox_area_entered(_area):
 	var player_hurt_sound_node = player_hurt_sound.instance()
-	emit_signal("player_hurt_sound_launch", player_hurt_sound_node)
+	GameEvents.emit_signal("add_child_asked", player_hurt_sound_node)
 
