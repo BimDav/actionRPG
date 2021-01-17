@@ -8,6 +8,6 @@ func create_grass_effect():
 	GameEvents.emit_signal("add_child_asked", grass_effect)
 
 
-func _on_SimpleHurtbox_area_entered(area):
+func _on_SimpleHurtbox_area_entered(_area):
 	create_grass_effect()
 	queue_free()

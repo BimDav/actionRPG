@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://Game Over.gd" type="Script" id=1]
+[ext_resource path="res://ResultsDisplay.gd" type="Script" id=1]
+[ext_resource path="res://Congratulations.tres" type="Resource" id=2]
 
 [sub_resource type="Animation" id=1]
 resource_name = "FadeIn"
@@ -14,7 +15,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 1 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Color( 0.0588235, 0.00392157, 0.00392157, 0 ), Color( 0.0352941, 0.45098, 0.0784314, 0.513726 ) ]
+"values": [ Color( 0.0588235, 0.00392157, 0.00392157, 0 ), Color( 0, 0, 0, 0.513726 ) ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("Label:self_modulate")
@@ -29,32 +30,33 @@ tracks/1/keys = {
 "values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
 }
 
-[node name="Congratulations" type="CanvasLayer"]
+[node name="ResultsDisplay" type="CanvasLayer"]
 script = ExtResource( 1 )
+results = ExtResource( 2 )
 
 [node name="ColorRect" type="ColorRect" parent="."]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0.0352941, 0.45098, 0.0784314, 0.513726 )
+color = Color( 0.0588235, 0.00392157, 0.00392157, 0 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label" type="Label" parent="."]
-anchor_left = 0.5
+visible = false
+self_modulate = Color( 1, 1, 1, 0 )
 anchor_top = 0.5
-anchor_right = 0.5
+anchor_right = 1.0
 anchor_bottom = 0.5
-margin_left = -36.5
 margin_top = -7.0
-margin_right = 36.5
 margin_bottom = 7.0
-text = "Congratulations!"
+text = "Game Over"
+align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-autoplay = "FadeIn"
 anims/FadeIn = SubResource( 1 )
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]

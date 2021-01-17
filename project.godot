@@ -44,6 +44,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Enemies/KinematicEnemy.gd"
 }, {
+"base": "Resource",
+"class": "Results",
+"language": "GDScript",
+"path": "res://Results.gd"
+}, {
 "base": "Node",
 "class": "State",
 "language": "GDScript",
@@ -62,6 +67,7 @@ _global_script_class_icons={
 "HurtSystem": "",
 "KinematicComponent2D": "",
 "KinematicEnemy": "",
+"Results": "",
 "State": "",
 "StateFactory": ""
 }

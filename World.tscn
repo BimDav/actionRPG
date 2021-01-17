@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=2]
+[gd_scene load_steps=66 format=2]
 
 [ext_resource path="res://World/Bush.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Player/Player.tscn" type="PackedScene" id=2]
@@ -15,6 +15,7 @@
 [ext_resource path="res://World/Gate.tscn" type="PackedScene" id=13]
 [ext_resource path="res://Enemies/TextBegin.tscn" type="PackedScene" id=14]
 [ext_resource path="res://World.gd" type="Script" id=15]
+[ext_resource path="res://ResultsDisplay.tscn" type="PackedScene" id=16]
 
 [sub_resource type="TileSet" id=1]
 0/name = "DirtTileset.png 0"
@@ -907,10 +908,13 @@ position = Vector2( 704, 384 )
 position = Vector2( 0, 0 )
 
 [node name="TextBegin" parent="." instance=ExtResource( 14 )]
+
+[node name="ResultsDisplay" parent="." instance=ExtResource( 16 )]
 [connection signal="boss_cut_scene" from="ObjectsYsort/Boss" to="Camera2D" method="_on_Boss_boss_cut_scene"]
 [connection signal="dead" from="ObjectsYsort/Boss" to="." method="_on_Boss_dead"]
 [connection signal="dead" from="ObjectsYsort/Boss" to="ObjectsYsort/Gate" method="_on_Boss_dead"]
 [connection signal="hit_wall" from="ObjectsYsort/Boss" to="Camera2D" method="_on_Boss_hit_wall"]
 [connection signal="gate_closed" from="ObjectsYsort/Gate" to="ObjectsYsort/Boss" method="_on_Gate_gate_closed"]
+[connection signal="reload" from="ResultsDisplay" to="." method="_on_ResultsDisplay_reload"]
 
 [editable path="Camera2D"]
