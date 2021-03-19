@@ -1,27 +1,65 @@
-[gd_scene load_steps=65 format=2]
+[gd_scene load_steps=47 format=2]
 
 [ext_resource path="res://Player/Player.png" type="Texture" id=1]
-[ext_resource path="res://Player/Player.gd" type="Script" id=2]
+[ext_resource path="res://AnimationSpace2D.gd" type="Script" id=2]
 [ext_resource path="res://Hurtboxes and hitboxes/Hitbox.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Hurtboxes and hitboxes/SwordHitbox.gd" type="Script" id=4]
+[ext_resource path="res://Player/PlayerStates.gd" type="Script" id=5]
 [ext_resource path="res://Shadows/MediumShadow.png" type="Texture" id=6]
 [ext_resource path="res://Music and Sounds/Swipe.wav" type="AudioStream" id=7]
 [ext_resource path="res://Music and Sounds/Evade.wav" type="AudioStream" id=8]
 [ext_resource path="res://WhiteColor.shader" type="Shader" id=9]
-[ext_resource path="res://Player/PlayerStates.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Player/Move.gd" type="Script" id=10]
 [ext_resource path="res://Player/KinematicPlayer.gd" type="Script" id=11]
 [ext_resource path="res://Hurtboxes and hitboxes/HurtSystem.tscn" type="PackedScene" id=12]
+[ext_resource path="res://Player/Attack.gd" type="Script" id=13]
+[ext_resource path="res://Player/Roll.gd" type="Script" id=14]
+[ext_resource path="res://Player/AttackAnimationSpace2D.tres" type="Resource" id=15]
 [ext_resource path="res://Hurtboxes and hitboxes/PlayerHurtSystem.gd" type="Script" id=16]
+[ext_resource path="res://Player/Idle.gd" type="Script" id=17]
+[ext_resource path="res://Player/RunAnimationSpace2D.tres" type="Resource" id=18]
+[ext_resource path="res://Player/RollAnimationSpace2D.tres" type="Resource" id=19]
+[ext_resource path="res://Player/IdleAnimationSpace2D.tres" type="Resource" id=20]
 
-[sub_resource type="ShaderMaterial" id=1]
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node2D
+
+const player_hurt_sound = preload(\"res://Player/PlayerHurtSound.tscn\")
+
+var stats = PlayerStats
+
+onready var player_states = $PlayerStates
+
+func _ready():
+	stats.connect(\"no_health\", self, \"queue_free\")
+	
+
+func _on_attack_animation_finished():
+	player_states._on_attack_animation_finished()
+		
+func _on_roll_animation_finished():
+	player_states._on_roll_animation_finished()
+
+func _on_Hurtbox_area_entered(_area):
+	var player_hurt_sound_node = player_hurt_sound.instance()
+	GameEvents.emit_signal(\"add_child_asked\", player_hurt_sound_node)
+
+"
+
+[sub_resource type="ShaderMaterial" id=2]
+resource_local_to_scene = true
 shader = ExtResource( 9 )
 shader_param/active = false
 
-[sub_resource type="Animation" id=2]
-resource_name = "AttackDown"
+[sub_resource type="ShaderMaterial" id=3]
+resource_local_to_scene = true
+shader = ExtResource( 9 )
+shader_param/active = true
+
+[sub_resource type="Animation" id=4]
 length = 0.4
 tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:frame")
+tracks/0/path = NodePath("../Player/Sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -33,7 +71,7 @@ tracks/0/keys = {
 "values": [ 36, 37, 38, 39 ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("HitboxPivot:rotation_degrees")
+tracks/1/path = NodePath("../Player/HitboxPivot:rotation_degrees")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -45,7 +83,7 @@ tracks/1/keys = {
 "values": [ 90.0 ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("HitboxPivot/SwordHitbox/CollisionShape2D:disabled")
+tracks/2/path = NodePath("../Player/HitboxPivot/SwordHitbox/CollisionShape2D:disabled")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -57,7 +95,7 @@ tracks/2/keys = {
 "values": [ false, true ]
 }
 tracks/3/type = "audio"
-tracks/3/path = NodePath("AudioStreamPlayer")
+tracks/3/path = NodePath("../Player/AudioStreamPlayer")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
@@ -70,26 +108,11 @@ tracks/3/keys = {
 } ],
 "times": PoolRealArray( 0.1 )
 }
-tracks/4/type = "method"
-tracks/4/path = NodePath(".")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/keys = {
-"times": PoolRealArray( 0.4 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [  ],
-"method": "_on_attack_animation_finished"
-} ]
-}
 
-[sub_resource type="Animation" id=3]
-resource_name = "AttackLeft"
+[sub_resource type="Animation" id=5]
 length = 0.4
 tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:frame")
+tracks/0/path = NodePath("../Player/Sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -101,7 +124,7 @@ tracks/0/keys = {
 "values": [ 32, 33, 34, 35 ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("HitboxPivot:rotation_degrees")
+tracks/1/path = NodePath("../Player/HitboxPivot:rotation_degrees")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -113,7 +136,7 @@ tracks/1/keys = {
 "values": [ 180.0 ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("HitboxPivot/SwordHitbox/CollisionShape2D:disabled")
+tracks/2/path = NodePath("../Player/HitboxPivot/SwordHitbox/CollisionShape2D:disabled")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -125,7 +148,7 @@ tracks/2/keys = {
 "values": [ false, true ]
 }
 tracks/3/type = "audio"
-tracks/3/path = NodePath("AudioStreamPlayer")
+tracks/3/path = NodePath("../Player/AudioStreamPlayer")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
@@ -138,26 +161,11 @@ tracks/3/keys = {
 } ],
 "times": PoolRealArray( 0.1 )
 }
-tracks/4/type = "method"
-tracks/4/path = NodePath(".")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/keys = {
-"times": PoolRealArray( 0.4 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [  ],
-"method": "_on_attack_animation_finished"
-} ]
-}
 
-[sub_resource type="Animation" id=4]
-resource_name = "AttackRight"
+[sub_resource type="Animation" id=6]
 length = 0.4
 tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:frame")
+tracks/0/path = NodePath("../Player/Sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -169,7 +177,7 @@ tracks/0/keys = {
 "values": [ 24, 25, 26, 27 ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("HitboxPivot:rotation_degrees")
+tracks/1/path = NodePath("../Player/HitboxPivot:rotation_degrees")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -181,7 +189,7 @@ tracks/1/keys = {
 "values": [ 0.0 ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("HitboxPivot/SwordHitbox/CollisionShape2D:disabled")
+tracks/2/path = NodePath("../Player/HitboxPivot/SwordHitbox/CollisionShape2D:disabled")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -193,7 +201,7 @@ tracks/2/keys = {
 "values": [ false, true ]
 }
 tracks/3/type = "audio"
-tracks/3/path = NodePath("AudioStreamPlayer")
+tracks/3/path = NodePath("../Player/AudioStreamPlayer")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
@@ -206,26 +214,11 @@ tracks/3/keys = {
 } ],
 "times": PoolRealArray( 0.1 )
 }
-tracks/4/type = "method"
-tracks/4/path = NodePath(".")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/keys = {
-"times": PoolRealArray( 0.4 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [  ],
-"method": "_on_attack_animation_finished"
-} ]
-}
 
-[sub_resource type="Animation" id=5]
-resource_name = "AttackUp"
+[sub_resource type="Animation" id=7]
 length = 0.4
 tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:frame")
+tracks/0/path = NodePath("../Player/Sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -237,7 +230,7 @@ tracks/0/keys = {
 "values": [ 28, 29, 30, 31 ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("HitboxPivot:rotation_degrees")
+tracks/1/path = NodePath("../Player/HitboxPivot:rotation_degrees")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -249,7 +242,7 @@ tracks/1/keys = {
 "values": [ 270.0 ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("HitboxPivot/SwordHitbox/CollisionShape2D:disabled")
+tracks/2/path = NodePath("../Player/HitboxPivot/SwordHitbox/CollisionShape2D:disabled")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -261,7 +254,7 @@ tracks/2/keys = {
 "values": [ false, true ]
 }
 tracks/3/type = "audio"
-tracks/3/path = NodePath("AudioStreamPlayer")
+tracks/3/path = NodePath("../Player/AudioStreamPlayer")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
@@ -274,27 +267,12 @@ tracks/3/keys = {
 } ],
 "times": PoolRealArray( 0.1 )
 }
-tracks/4/type = "method"
-tracks/4/path = NodePath(".")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/keys = {
-"times": PoolRealArray( 0.4 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [  ],
-"method": "_on_attack_animation_finished"
-} ]
-}
 
-[sub_resource type="Animation" id=6]
-resource_name = "IdleDown"
+[sub_resource type="Animation" id=8]
 length = 0.1
 loop = true
 tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:frame")
+tracks/0/path = NodePath("../Player/Sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -306,12 +284,11 @@ tracks/0/keys = {
 "values": [ 18 ]
 }
 
-[sub_resource type="Animation" id=7]
-resource_name = "IdleLeft"
+[sub_resource type="Animation" id=9]
 length = 0.1
 loop = true
 tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:frame")
+tracks/0/path = NodePath("../Player/Sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -323,12 +300,11 @@ tracks/0/keys = {
 "values": [ 12 ]
 }
 
-[sub_resource type="Animation" id=8]
-resource_name = "IdleRight"
+[sub_resource type="Animation" id=10]
 length = 0.1
 loop = true
 tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:frame")
+tracks/0/path = NodePath("../Player/Sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -340,12 +316,11 @@ tracks/0/keys = {
 "values": [ 0 ]
 }
 
-[sub_resource type="Animation" id=9]
-resource_name = "IdleUp"
+[sub_resource type="Animation" id=11]
 length = 0.1
 loop = true
 tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:frame")
+tracks/0/path = NodePath("../Player/Sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -357,11 +332,10 @@ tracks/0/keys = {
 "values": [ 6 ]
 }
 
-[sub_resource type="Animation" id=10]
-resource_name = "RollDown"
+[sub_resource type="Animation" id=12]
 length = 0.5
 tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:frame")
+tracks/0/path = NodePath("../Player/Sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -373,7 +347,7 @@ tracks/0/keys = {
 "values": [ 55, 56, 57, 58, 59 ]
 }
 tracks/1/type = "audio"
-tracks/1/path = NodePath("AudioStreamPlayer")
+tracks/1/path = NodePath("../Player/AudioStreamPlayer")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -386,26 +360,11 @@ tracks/1/keys = {
 } ],
 "times": PoolRealArray( 0.1 )
 }
-tracks/2/type = "method"
-tracks/2/path = NodePath(".")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0.5 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [  ],
-"method": "_on_roll_animation_finished"
-} ]
-}
 
-[sub_resource type="Animation" id=11]
-resource_name = "RollLeft"
+[sub_resource type="Animation" id=13]
 length = 0.5
 tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:frame")
+tracks/0/path = NodePath("../Player/Sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -417,7 +376,7 @@ tracks/0/keys = {
 "values": [ 50, 51, 52, 53, 54 ]
 }
 tracks/1/type = "audio"
-tracks/1/path = NodePath("AudioStreamPlayer")
+tracks/1/path = NodePath("../Player/AudioStreamPlayer")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -430,26 +389,11 @@ tracks/1/keys = {
 } ],
 "times": PoolRealArray( 0.1 )
 }
-tracks/2/type = "method"
-tracks/2/path = NodePath(".")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0.5 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [  ],
-"method": "_on_roll_animation_finished"
-} ]
-}
 
-[sub_resource type="Animation" id=12]
-resource_name = "RollRight"
+[sub_resource type="Animation" id=14]
 length = 0.5
 tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:frame")
+tracks/0/path = NodePath("../Player/Sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -461,7 +405,7 @@ tracks/0/keys = {
 "values": [ 40, 41, 42, 43, 44 ]
 }
 tracks/1/type = "audio"
-tracks/1/path = NodePath("AudioStreamPlayer")
+tracks/1/path = NodePath("../Player/AudioStreamPlayer")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -474,26 +418,11 @@ tracks/1/keys = {
 } ],
 "times": PoolRealArray( 0.1 )
 }
-tracks/2/type = "method"
-tracks/2/path = NodePath(".")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0.5 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [  ],
-"method": "_on_roll_animation_finished"
-} ]
-}
 
-[sub_resource type="Animation" id=13]
-resource_name = "RollUp"
+[sub_resource type="Animation" id=15]
 length = 0.5
 tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:frame")
+tracks/0/path = NodePath("../Player/Sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -505,7 +434,7 @@ tracks/0/keys = {
 "values": [ 45, 46, 47, 48, 49 ]
 }
 tracks/1/type = "audio"
-tracks/1/path = NodePath("AudioStreamPlayer")
+tracks/1/path = NodePath("../Player/AudioStreamPlayer")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -518,27 +447,12 @@ tracks/1/keys = {
 } ],
 "times": PoolRealArray( 0.1 )
 }
-tracks/2/type = "method"
-tracks/2/path = NodePath(".")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0.5 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [  ],
-"method": "_on_roll_animation_finished"
-} ]
-}
 
-[sub_resource type="Animation" id=14]
-resource_name = "RunDown"
+[sub_resource type="Animation" id=16]
 length = 0.6
 loop = true
 tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:frame")
+tracks/0/path = NodePath("../Player/Sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -550,12 +464,11 @@ tracks/0/keys = {
 "values": [ 19, 20, 21, 22, 23, 18 ]
 }
 
-[sub_resource type="Animation" id=15]
-resource_name = "RunLeft"
+[sub_resource type="Animation" id=17]
 length = 0.6
 loop = true
 tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:frame")
+tracks/0/path = NodePath("../Player/Sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -567,12 +480,11 @@ tracks/0/keys = {
 "values": [ 13, 14, 15, 16, 17, 12 ]
 }
 
-[sub_resource type="Animation" id=16]
-resource_name = "RunRight"
+[sub_resource type="Animation" id=18]
 length = 0.6
 loop = true
 tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:frame")
+tracks/0/path = NodePath("../Player/Sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -584,12 +496,11 @@ tracks/0/keys = {
 "values": [ 1, 2, 3, 4, 5, 0 ]
 }
 
-[sub_resource type="Animation" id=17]
-resource_name = "RunUp"
+[sub_resource type="Animation" id=19]
 length = 0.6
 loop = true
 tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:frame")
+tracks/0/path = NodePath("../Player/Sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -601,149 +512,22 @@ tracks/0/keys = {
 "values": [ 7, 8, 9, 10, 11, 6 ]
 }
 
-[sub_resource type="AnimationNodeAnimation" id=18]
-animation = "AttackLeft"
-
-[sub_resource type="AnimationNodeAnimation" id=19]
-animation = "AttackDown"
-
-[sub_resource type="AnimationNodeAnimation" id=20]
-animation = "AttackRight"
-
-[sub_resource type="AnimationNodeAnimation" id=21]
-animation = "AttackUp"
-
-[sub_resource type="AnimationNodeBlendSpace2D" id=22]
-blend_point_0/node = SubResource( 18 )
-blend_point_0/pos = Vector2( -1, 0 )
-blend_point_1/node = SubResource( 19 )
-blend_point_1/pos = Vector2( 0, 1.1 )
-blend_point_2/node = SubResource( 20 )
-blend_point_2/pos = Vector2( 1, 0 )
-blend_point_3/node = SubResource( 21 )
-blend_point_3/pos = Vector2( 0, -1.1 )
-min_space = Vector2( -1, -1.1 )
-max_space = Vector2( 1, 1.1 )
-blend_mode = 1
-
-[sub_resource type="AnimationNodeAnimation" id=23]
-animation = "IdleLeft"
-
-[sub_resource type="AnimationNodeAnimation" id=24]
-animation = "IdleDown"
-
-[sub_resource type="AnimationNodeAnimation" id=25]
-animation = "IdleRight"
-
-[sub_resource type="AnimationNodeAnimation" id=26]
-animation = "IdleUp"
-
-[sub_resource type="AnimationNodeBlendSpace2D" id=27]
-blend_point_0/node = SubResource( 23 )
-blend_point_0/pos = Vector2( -1, 0 )
-blend_point_1/node = SubResource( 24 )
-blend_point_1/pos = Vector2( 0, 1.1 )
-blend_point_2/node = SubResource( 25 )
-blend_point_2/pos = Vector2( 1, 0 )
-blend_point_3/node = SubResource( 26 )
-blend_point_3/pos = Vector2( 0, -1.1 )
-min_space = Vector2( -1, -1.1 )
-max_space = Vector2( 1, 1.1 )
-blend_mode = 1
-
-[sub_resource type="AnimationNodeAnimation" id=28]
-animation = "RollLeft"
-
-[sub_resource type="AnimationNodeAnimation" id=29]
-animation = "RollDown"
-
-[sub_resource type="AnimationNodeAnimation" id=30]
-animation = "RollRight"
-
-[sub_resource type="AnimationNodeAnimation" id=31]
-animation = "RollUp"
-
-[sub_resource type="AnimationNodeBlendSpace2D" id=32]
-blend_point_0/node = SubResource( 28 )
-blend_point_0/pos = Vector2( -1, 0 )
-blend_point_1/node = SubResource( 29 )
-blend_point_1/pos = Vector2( 0, 1.1 )
-blend_point_2/node = SubResource( 30 )
-blend_point_2/pos = Vector2( 1, 0 )
-blend_point_3/node = SubResource( 31 )
-blend_point_3/pos = Vector2( 0, -1.1 )
-min_space = Vector2( -1, -1.1 )
-max_space = Vector2( 1, 1.1 )
-blend_mode = 1
-
-[sub_resource type="AnimationNodeAnimation" id=33]
-animation = "RunLeft"
-
-[sub_resource type="AnimationNodeAnimation" id=34]
-animation = "RunDown"
-
-[sub_resource type="AnimationNodeAnimation" id=35]
-animation = "RunRight"
-
-[sub_resource type="AnimationNodeAnimation" id=36]
-animation = "RunUp"
-
-[sub_resource type="AnimationNodeBlendSpace2D" id=37]
-blend_point_0/node = SubResource( 33 )
-blend_point_0/pos = Vector2( -1, 0 )
-blend_point_1/node = SubResource( 34 )
-blend_point_1/pos = Vector2( 0, 1.1 )
-blend_point_2/node = SubResource( 35 )
-blend_point_2/pos = Vector2( 1, 0 )
-blend_point_3/node = SubResource( 36 )
-blend_point_3/pos = Vector2( 0, -1.1 )
-min_space = Vector2( -1, -1.1 )
-max_space = Vector2( 1, 1.15 )
-blend_mode = 1
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=38]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=39]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=40]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=41]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=42]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=43]
-
-[sub_resource type="AnimationNodeStateMachine" id=44]
-states/Attack/node = SubResource( 22 )
-states/Attack/position = Vector2( 297, 166 )
-states/Idle/node = SubResource( 27 )
-states/Idle/position = Vector2( 177, 49 )
-states/Roll/node = SubResource( 32 )
-states/Roll/position = Vector2( 114, 166 )
-states/Run/node = SubResource( 37 )
-states/Run/position = Vector2( 486, 92 )
-transitions = [ "Idle", "Run", SubResource( 38 ), "Run", "Idle", SubResource( 39 ), "Idle", "Attack", SubResource( 40 ), "Attack", "Idle", SubResource( 41 ), "Idle", "Roll", SubResource( 42 ), "Roll", "Idle", SubResource( 43 ) ]
-start_node = "Idle"
-
-[sub_resource type="AnimationNodeStateMachinePlayback" id=45]
-
-[sub_resource type="CapsuleShape2D" id=46]
+[sub_resource type="CapsuleShape2D" id=20]
 height = 12.0
 
-[sub_resource type="CapsuleShape2D" id=47]
+[sub_resource type="CapsuleShape2D" id=21]
 radius = 8.28668
 height = 6.7527
 
-[sub_resource type="CapsuleShape2D" id=48]
+[sub_resource type="CapsuleShape2D" id=22]
 radius = 5.81877
 height = 4.79184
 
-[sub_resource type="CapsuleShape2D" id=49]
+[sub_resource type="CapsuleShape2D" id=23]
 radius = 5.02821
 height = 4.64222
 
-[sub_resource type="Animation" id=50]
-resource_name = "Start"
+[sub_resource type="Animation" id=24]
 length = 0.2
 loop = true
 tracks/0/type = "value"
@@ -759,8 +543,7 @@ tracks/0/keys = {
 "values": [ true, false ]
 }
 
-[sub_resource type="Animation" id=51]
-resource_name = "BlinkAnimationStop"
+[sub_resource type="Animation" id=25]
 length = 0.1
 tracks/0/type = "value"
 tracks/0/path = NodePath("../../Sprite:material:shader_param/active")
@@ -775,7 +558,7 @@ tracks/0/keys = {
 "values": [ false ]
 }
 
-[sub_resource type="GDScript" id=52]
+[sub_resource type="GDScript" id=26]
 script/source = "tool
 extends AnimationPlayer
 
@@ -796,46 +579,69 @@ func _get_configuration_warning() -> String:
 "
 
 [node name="Player" type="Node2D"]
-script = ExtResource( 2 )
+script = SubResource( 1 )
+
+[node name="PlayerStates" type="Node" parent="."]
+script = ExtResource( 5 )
+__meta__ = {
+"_editor_description_": ""
+}
+init_state_path = NodePath("Idle")
+kbody_node_path = NodePath("../KinematicComponent2D")
+animation_space_node_path = NodePath("../AnimationSpace2D")
+sword_hitbox_node_path = NodePath("../HitboxPivot/SwordHitbox")
+hurtbox_node_path = NodePath("../HurtSystem/Hurtbox")
+shadow_sprite_node_path = NodePath("../ShadowSprite")
+
+[node name="Idle" type="Node" parent="PlayerStates"]
+script = ExtResource( 17 )
+
+[node name="Move" type="Node" parent="PlayerStates"]
+script = ExtResource( 10 )
+
+[node name="Attack" type="Node" parent="PlayerStates"]
+script = ExtResource( 13 )
+
+[node name="Roll" type="Node" parent="PlayerStates"]
+script = ExtResource( 14 )
+
+[node name="InputBufferTimer" type="Timer" parent="PlayerStates"]
 
 [node name="ShadowSprite" type="Sprite" parent="."]
+material = SubResource( 2 )
 position = Vector2( 0, 2.5 )
 texture = ExtResource( 6 )
 
 [node name="Sprite" type="Sprite" parent="."]
-material = SubResource( 1 )
+material = SubResource( 3 )
 position = Vector2( 0, -9 )
 texture = ExtResource( 1 )
 hframes = 60
-frame = 12
+frame = 36
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 pause_mode = 2
-anims/AttackDown = SubResource( 2 )
-anims/AttackLeft = SubResource( 3 )
-anims/AttackRight = SubResource( 4 )
-anims/AttackUp = SubResource( 5 )
-anims/IdleDown = SubResource( 6 )
-anims/IdleLeft = SubResource( 7 )
-anims/IdleRight = SubResource( 8 )
-anims/IdleUp = SubResource( 9 )
-anims/RollDown = SubResource( 10 )
-anims/RollLeft = SubResource( 11 )
-anims/RollRight = SubResource( 12 )
-anims/RollUp = SubResource( 13 )
-anims/RunDown = SubResource( 14 )
-anims/RunLeft = SubResource( 15 )
-anims/RunRight = SubResource( 16 )
-anims/RunUp = SubResource( 17 )
+anims/AttackDown = SubResource( 4 )
+anims/AttackLeft = SubResource( 5 )
+anims/AttackRight = SubResource( 6 )
+anims/AttackUp = SubResource( 7 )
+anims/IdleDown = SubResource( 8 )
+anims/IdleLeft = SubResource( 9 )
+anims/IdleRight = SubResource( 10 )
+anims/IdleUp = SubResource( 11 )
+anims/RollDown = SubResource( 12 )
+anims/RollLeft = SubResource( 13 )
+anims/RollRight = SubResource( 14 )
+anims/RollUp = SubResource( 15 )
+anims/RunDown = SubResource( 16 )
+anims/RunLeft = SubResource( 17 )
+anims/RunRight = SubResource( 18 )
+anims/RunUp = SubResource( 19 )
 
-[node name="AnimationTree" type="AnimationTree" parent="."]
-tree_root = SubResource( 44 )
-anim_player = NodePath("../AnimationPlayer")
-parameters/playback = SubResource( 45 )
-parameters/Attack/blend_position = Vector2( 0, 1 )
-parameters/Idle/blend_position = Vector2( 0, 1 )
-parameters/Roll/blend_position = Vector2( 0, 1 )
-parameters/Run/blend_position = Vector2( 0, 1 )
+[node name="AnimationSpace2D" type="Node" parent="."]
+script = ExtResource( 2 )
+animation_player_path = NodePath("../AnimationPlayer")
+spaces = [ ExtResource( 20 ), ExtResource( 15 ), ExtResource( 19 ), ExtResource( 18 ) ]
 
 [node name="HitboxPivot" type="Position2D" parent="."]
 position = Vector2( 0, -4 )
@@ -847,27 +653,23 @@ collision_mask = 72
 script = ExtResource( 4 )
 
 [node name="CollisionShape2D" parent="HitboxPivot/SwordHitbox" index="0"]
-shape = SubResource( 46 )
+shape = SubResource( 20 )
 disabled = true
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 8 )
 
 [node name="Objects" type="Area2D" parent="."]
+input_pickable = false
 collision_layer = 0
 collision_mask = 64
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Objects"]
 position = Vector2( -0.840897, -7.25273 )
-shape = SubResource( 47 )
+shape = SubResource( 21 )
 
-[node name="PlayerStates" parent="." instance=ExtResource( 10 )]
-kbody_node_path = NodePath("../KinematicBody2D")
-animation_tree_node_path = NodePath("../AnimationTree")
-sword_hitbox_node_path = NodePath("../HitboxPivot/SwordHitbox")
-hurtbox_node_path = NodePath("../HurtSystem/Hurtbox")
-
-[node name="KinematicBody2D" type="KinematicBody2D" parent="."]
+[node name="KinematicComponent2D" type="KinematicBody2D" parent="."]
+input_pickable = true
 collision_layer = 2
 script = ExtResource( 11 )
 remote_path = NodePath("..")
@@ -875,29 +677,33 @@ acceleration = 2.2
 max_speed = 2
 friction = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="KinematicBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KinematicComponent2D"]
 position = Vector2( -0.106323, 0.941025 )
 rotation = -1.5708
-shape = SubResource( 48 )
+shape = SubResource( 22 )
 
 [node name="HurtSystem" parent="." instance=ExtResource( 12 )]
 script = ExtResource( 16 )
 
 [node name="Hurtbox" parent="HurtSystem" index="0"]
+input_pickable = false
 collision_layer = 4
 
 [node name="CollisionShape2D" parent="HurtSystem/Hurtbox" index="0"]
 position = Vector2( 0, -5.959 )
-shape = SubResource( 49 )
+shape = SubResource( 23 )
 
 [node name="Timer" parent="HurtSystem/Hurtbox" index="1"]
 wait_time = 1.5
 
 [node name="BlinkAnimationPlayer" parent="HurtSystem" index="2"]
-anims/BlinkAnimation = SubResource( 50 )
-anims/BlinkAnimationStop = SubResource( 51 )
-script = SubResource( 52 )
+anims/BlinkAnimation = SubResource( 24 )
+anims/BlinkAnimationStop = SubResource( 25 )
+script = SubResource( 26 )
 sprite_node_path = NodePath("../../Sprite")
+[connection signal="state_changed" from="PlayerStates" to="PlayerStates" method="_on_PlayerStates_state_changed"]
+[connection signal="animation_finished" from="AnimationPlayer" to="PlayerStates" method="_on_AnimationPlayer_animation_finished"]
+[connection signal="input_event" from="KinematicComponent2D" to="PlayerStates" method="_on_KinematicComponent2D_input_event"]
 [connection signal="area_entered" from="HurtSystem/Hurtbox" to="." method="_on_Hurtbox_area_entered"]
 
 [editable path="HitboxPivot/SwordHitbox"]

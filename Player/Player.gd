@@ -8,7 +8,7 @@ onready var animation_player = $AnimationPlayer
 onready var animation_tree = $AnimationTree
 onready var animation_state = animation_tree.get("parameters/playback")
 onready var player_states = $PlayerStates
-
+onready var shadow_sprite: Sprite = $ShadowSprite
 
 func _ready():
 	stats.connect("no_health", self, "queue_free")

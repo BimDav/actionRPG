@@ -9,6 +9,16 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Node",
+"class": "AnimationSpace2D",
+"language": "GDScript",
+"path": "res://AnimationSpace2D.gd"
+}, {
+"base": "Resource",
+"class": "AnimationSpace2DRes",
+"language": "GDScript",
+"path": "res://AnimationSpace2DRes.gd"
+}, {
 "base": "State",
 "class": "BaseBatState",
 "language": "GDScript",
@@ -60,6 +70,8 @@ _global_script_classes=[ {
 "path": "res://StateFactory.gd"
 } ]
 _global_script_class_icons={
+"AnimationSpace2D": "",
+"AnimationSpace2DRes": "",
 "BaseBatState": "",
 "DeathEffectLauncher": "",
 "GitAPI": "",

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://AnimationSpace2DRes.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+up = "AttackUp"
+down = "AttackDown"
+left = "AttackLeft"
+right = "AttackRight"
+name = "Attack"

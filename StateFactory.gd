@@ -11,7 +11,7 @@ export(NodePath) var init_state_path = ""
 
 func _ready():
 	state = get_node(init_state_path)
-	state.enter(null)
+	state.call_deferred("enter", null)
 	
 func _physics_process(delta):
 	if not Engine.editor_hint:
